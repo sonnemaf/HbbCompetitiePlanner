@@ -13,5 +13,23 @@ namespace HbbCompetitiePlanner.Library.Models {
         public int CompareTo(Speelronde other) {
             return this.Nummer.CompareTo(other.Nummer);
         }
+
+        internal void AddWedstrijd(Wedstrijd wedstrijd, bool wisselUitThuis) {
+            if (wedstrijd.Poul.IsHalveCompetitie && wedstrijd.Speelronde.IsTweedeDeel) {
+                return;
+            }
+
+            if (wisselUitThuis) {
+                if (wedstrijd.Team1.AantalThuisWedstrijden > wedstrijd.Team2.AantalThuisWedstrijden) {
+                    (wedstrijd.Team1, wedstrijd.Team2) = (wedstrijd.Team2, wedstrijd.Team1);
+                }
+                wedstrijd.Team1.AantalThuisWedstrijden++;
+            }
+
+            this.Wedstrijden.Add(wedstrijd);
+            wedstrijd.Team1.Wedstrijden.Add(wedstrijd);
+            wedstrijd.Team2.Wedstrijden.Add(wedstrijd);
+        }
     }
 }
+

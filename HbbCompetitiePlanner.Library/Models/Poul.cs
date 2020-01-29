@@ -1,4 +1,5 @@
-﻿using ReflectionIT.Universal.Helpers;
+﻿using Newtonsoft.Json;
+using ReflectionIT.Universal.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace HbbCompetitiePlanner.Library.Models {
 
     public class Poul : ObservableObject {
 
-        public string Naam { get; set; }
+        public string? Naam { get; set; }
         public int Nummer { get; set; }
         public bool IsHalveCompetitie { get; set; }
         public List<Team> Teams { get; } = new List<Team>();
@@ -17,7 +18,7 @@ namespace HbbCompetitiePlanner.Library.Models {
 
             this.Speelrondes.Clear();
 
-            var listTeam = Teams.ToList(); // Copy
+            List<Team?> listTeam = new List<Team?>(this.Teams); // Copy
             if (listTeam.Count % 2 != 0) {
                 listTeam.Add(null);
             }
@@ -48,25 +49,36 @@ namespace HbbCompetitiePlanner.Library.Models {
                 }
 
                 int teamIdx = day % teamsSize;
-                if (teams[teamIdx] is object && teams[0] is object) {
-                    ronde1.Wedstrijden.Add(new Wedstrijd(nr, teams[teamIdx], listTeam[0], this, ronde1));
-                    ronde2.Wedstrijden.Add(new Wedstrijd(1000 + nr++, listTeam[0], teams[teamIdx], this, ronde2));
+                var secondT = listTeam[0];
+                if (teams[teamIdx] is object && secondT is object) {
+                    ronde1.AddWedstrijd(new Wedstrijd(nr, teams[teamIdx], secondT, this, ronde1), true);
+                    ronde2.AddWedstrijd(new Wedstrijd(1000 + nr++, ronde1.Wedstrijden.Last().Team2, ronde1.Wedstrijden.Last().Team1, this, ronde2), false);
+                }
 
-                    for (int idx = 1; idx < halfSize; idx++) {
-                        int firstTeam = (day + idx) % teamsSize;
-                        int secondTeam = (day + teamsSize - idx) % teamsSize;
-                        if (teams[firstTeam] is object && teams[secondTeam] is object) {
-                            ronde1.Wedstrijden.Add(new Wedstrijd(nr, teams[firstTeam], listTeam[secondTeam], this, ronde1));
-                            ronde2.Wedstrijden.Add(new Wedstrijd(1000 + nr++, teams[secondTeam], listTeam[firstTeam], this, ronde2));
-                        }
+                for (int idx = 1; idx < halfSize; idx++) {
+                    int firstTeam = (day + idx) % teamsSize;
+                    int secondTeam = (day + teamsSize - idx) % teamsSize;
+                    if (teams[firstTeam] is object && teams[secondTeam] is object) {
+                        ronde1.AddWedstrijd(new Wedstrijd(nr, teams[firstTeam], teams[secondTeam], this, ronde1), true);
+                        ronde2.AddWedstrijd(new Wedstrijd(1000 + nr++, ronde1.Wedstrijden.Last().Team2, ronde1.Wedstrijden.Last().Team1, this, ronde2), false);
                     }
                 }
-            }
 
-            this.Speelrondes.Sort();
+            }
+            //this.Speelrondes.Sort();
 
             return nr;
         }
+
+        [JsonIgnore]
+        public IEnumerable<Wedstrijd> Wedstrijden {
+            get {
+                return this.Speelrondes.SelectMany(s => s.Wedstrijden);
+            }
+        }
+
+        [JsonIgnore]
+        public string TeamNamen => string.Join(", ", Teams.Select(t => $"{t.Naam} ({(t.VoorkeursAvond == System.DayOfWeek.Wednesday ? "wo" : "do")})"));
 
     }
 }

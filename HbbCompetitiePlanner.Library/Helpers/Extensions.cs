@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace ReflectionIT.Universal.Helpers {
 
     public static class Extensions {
@@ -432,6 +434,9 @@ namespace ReflectionIT.Universal.Helpers {
             }
         }
 
+        public static bool IsInSameWeek(this DateTime date1, DateTime date2) {
+            return date1.AddDays(-(int)date1.DayOfWeek) == date2.AddDays(-(int)date2.DayOfWeek);
+        }
 
 
     }

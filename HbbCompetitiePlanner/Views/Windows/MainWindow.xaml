@@ -1,0 +1,129 @@
+﻿<Window x:Class="HbbCompetitiePlanner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:helpers="clr-namespace:HbbCompetitiePlanner.Helpers"
+        xmlns:local="clr-namespace:HbbCompetitiePlanner"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:HbbCompetitiePlanner.Library.Models;assembly=HbbCompetitiePlanner.Library"
+        xmlns:vm="clr-namespace:HbbCompetitiePlanner.Library.ViewModels;assembly=HbbCompetitiePlanner.Library"
+        Title="HBB Competitie Planner"
+        Width="800"
+        Height="450"
+        DataContext="{x:Static vm:MainViewModel.Current}"
+        FontSize="16"
+        WindowState="Maximized"
+        mc:Ignorable="d">
+
+    <Window.Resources>
+
+        <DataTemplate x:Key="WedstrijdDataTemplate">
+            <StackPanel d:DataContext="{d:DesignInstance Type=models:Wedstrijd}"
+                        Orientation="Horizontal">
+                <TextBlock Width="50"
+                           Text="{Binding Speelronde.Nummer}"
+                           ToolTipService.ToolTip="Ronde" />
+                <TextBlock Width="50"
+                           Text="{Binding Nummer}"
+                           ToolTipService.ToolTip="Wedstrijd Nr" />
+                <TextBlock Width="200"
+                           Text="{Binding Speeldatum, StringFormat=ddd-d-M-yyyy, ConverterCulture=nl-NL}" />
+                <TextBlock Width="200"
+                           Text="{Binding Team1.Naam}" />
+                <TextBlock Width="200"
+                           Text="{Binding Team2.Naam}" />
+            </StackPanel>
+
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="8">
+            <Label Content="Input" />
+            <TextBox Text="" />
+            <Button Margin="0,8"
+                    Command="{Binding StartCommand, Mode=OneTime}"
+                    Content="Start" />
+        </StackPanel>
+
+        <TabControl Grid.Row="1"
+                    Margin="8">
+            <TabItem Header="Json">
+                <TextBox AcceptsReturn="True"
+                         IsReadOnly="True"
+                         Text="{Binding Output, Mode=OneWay}"
+                         VerticalScrollBarVisibility="Auto" />
+            </TabItem>
+            <TabItem Header="Pouls">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Competitie.Pouls}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="8"
+                                        Padding="8"
+                                        BorderBrush="Black"
+                                        BorderThickness="2">
+                                    <StackPanel>
+                                        <TextBlock FontSize="20"
+                                                   Foreground="Red"
+                                                   Text="{Binding Naam}" />
+                                        <TextBlock Text="{Binding Nummer}" />
+                                        <TextBlock Text="{Binding IsHalveCompetitie}" />
+                                        <TextBlock Text="{Binding TeamNamen}" />
+                                        <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                                      ItemsSource="{Binding Wedstrijden}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Teams">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Competitie.Pouls}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="8"
+                                        Padding="8"
+                                        BorderBrush="Black"
+                                        BorderThickness="2">
+                                    <StackPanel>
+                                        <TextBlock FontSize="20"
+                                                   Foreground="Red"
+                                                   Text="{Binding Naam}" />
+                                        <TextBlock Text="{Binding Nummer}" />
+                                        <ItemsControl ItemsSource="{Binding Teams}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="8"
+                                                            Padding="8"
+                                                            BorderBrush="Black"
+                                                            BorderThickness="2">
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="20"
+                                                                       Foreground="Blue"
+                                                                       Text="{Binding Naam}" />
+                                                            <TextBlock Text="{Binding VoorkeursAvond, Converter={x:Static helpers:AvondConverter.Current}}" />
+                                                            <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                                                          ItemsSource="{Binding Wedstrijden}" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

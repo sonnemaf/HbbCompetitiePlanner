@@ -7,7 +7,7 @@ namespace HbbCompetitiePlanner.Library.Models {
 
     public class Competitie : ObservableObject {
 
-        public string Naam { get; set; }
+        public string? Naam { get; set; }
 
         public List<Speelavond> Speelavonden { get; } = new List<Speelavond>();
         public List<Poul> Pouls { get; } = new List<Poul>();
@@ -28,6 +28,14 @@ namespace HbbCompetitiePlanner.Library.Models {
 
                     if (wedstrijd.Speelavond is null && avonden.ContainsKey(wedstrijd.Team1.VoorkeursAvond)) {
                         var avond = avonden[wedstrijd.Team1.VoorkeursAvond];
+
+                        if (wedstrijd.Team1.Wedstrijden.Any(w => w.Speeldatum.IsInSameWeek(avond.Datum))) {
+                            continue;
+                        }
+                        if (wedstrijd.Team2.Wedstrijden.Any(w => w.Speeldatum.IsInSameWeek(avond.Datum))) {
+                            continue;
+                        }
+
                         var baanNr = avond.Wedstrijden.Count + 1;
                         wedstrijd.Speelavond = avond;
                         wedstrijd.BaanNummer = baanNr;
@@ -37,7 +45,12 @@ namespace HbbCompetitiePlanner.Library.Models {
                         }
                     }
                 }
+            }
+        }
 
+        internal void Sorteren() {
+            foreach (var team in Pouls.SelectMany(p => p.Teams)) {
+                team.Wedstrijden.Sort();
             }
         }
     }

@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Windows.Input;
 
+#nullable disable
+
 namespace ReflectionIT.Universal.Helpers {
 
     public class RelayCommand : RelayCommand<object>, INotifyPropertyChanged {

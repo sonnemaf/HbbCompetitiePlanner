@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 
 namespace HbbCompetitiePlanner {
     /// <summary>
@@ -6,5 +7,9 @@ namespace HbbCompetitiePlanner {
     /// </summary>
     public partial class App : Application
     {
+
+        public App() {
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("nl-NL");
+        }
     }
 }

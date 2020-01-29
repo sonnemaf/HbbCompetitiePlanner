@@ -65,7 +65,7 @@ namespace HbbCompetitiePlanner.Library.Models {
                 }
 
             }
-            //this.Speelrondes.Sort();
+            this.Speelrondes.Sort();
 
             return nr;
         }

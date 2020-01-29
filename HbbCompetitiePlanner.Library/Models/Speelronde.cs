@@ -21,6 +21,7 @@ namespace HbbCompetitiePlanner.Library.Models {
 
             if (wisselUitThuis) {
                 if (wedstrijd.Team1.AantalThuisWedstrijden > wedstrijd.Team2.AantalThuisWedstrijden) {
+                    //if (Extensions.Random.Next(1, 1000) > 500) {
                     (wedstrijd.Team1, wedstrijd.Team2) = (wedstrijd.Team2, wedstrijd.Team1);
                 }
                 wedstrijd.Team1.AantalThuisWedstrijden++;

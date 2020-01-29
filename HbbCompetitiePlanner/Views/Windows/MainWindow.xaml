@@ -26,11 +26,11 @@
                 <TextBlock Width="50"
                            Text="{Binding Nummer}"
                            ToolTipService.ToolTip="Wedstrijd Nr" />
-                <TextBlock Width="200"
+                <TextBlock Width="140"
                            Text="{Binding Speeldatum, StringFormat=ddd-d-M-yyyy, ConverterCulture=nl-NL}" />
-                <TextBlock Width="200"
+                <TextBlock Width="300"
                            Text="{Binding Team1.Naam}" />
-                <TextBlock Width="200"
+                <TextBlock Width="300"
                            Text="{Binding Team2.Naam}" />
             </StackPanel>
 
@@ -52,12 +52,7 @@
 
         <TabControl Grid.Row="1"
                     Margin="8">
-            <TabItem Header="Json">
-                <TextBox AcceptsReturn="True"
-                         IsReadOnly="True"
-                         Text="{Binding Output, Mode=OneWay}"
-                         VerticalScrollBarVisibility="Auto" />
-            </TabItem>
+
             <TabItem Header="Pouls">
                 <ScrollViewer>
                     <ItemsControl ItemsSource="{Binding Competitie.Pouls}">
@@ -71,10 +66,11 @@
                                         <TextBlock FontSize="20"
                                                    Foreground="Red"
                                                    Text="{Binding Naam}" />
-                                        <TextBlock Text="{Binding Nummer}" />
-                                        <TextBlock Text="{Binding IsHalveCompetitie}" />
+                                        <TextBlock Text="{Binding Nummer, StringFormat='Nummer: {0}'}" />
+                                        <TextBlock Text="{Binding IsHalveCompetitie, StringFormat='Halve competitie: {0}'}" />
                                         <TextBlock Text="{Binding TeamNamen}" />
-                                        <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                        <ItemsControl Margin="0,8"
+                                                      ItemTemplate="{StaticResource WedstrijdDataTemplate}"
                                                       ItemsSource="{Binding Wedstrijden}" />
                                     </StackPanel>
                                 </Border>
@@ -96,7 +92,7 @@
                                         <TextBlock FontSize="20"
                                                    Foreground="Red"
                                                    Text="{Binding Naam}" />
-                                        <TextBlock Text="{Binding Nummer}" />
+                                        <TextBlock Text="{Binding Nummer, StringFormat='Nummer: {0}'}" />
                                         <ItemsControl ItemsSource="{Binding Teams}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -108,8 +104,9 @@
                                                             <TextBlock FontSize="20"
                                                                        Foreground="Blue"
                                                                        Text="{Binding Naam}" />
-                                                            <TextBlock Text="{Binding VoorkeursAvond, Converter={x:Static helpers:AvondConverter.Current}}" />
-                                                            <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                                            <TextBlock Text="{Binding VoorkeursAvond, Converter={x:Static helpers:AvondConverter.Current}, StringFormat='VoorkeursAvond: {0}'}" />
+                                                            <ItemsControl Margin="0,8"
+                                                                          ItemTemplate="{StaticResource WedstrijdDataTemplate}"
                                                                           ItemsSource="{Binding Wedstrijden}" />
                                                         </StackPanel>
                                                     </Border>
@@ -122,6 +119,12 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Json">
+                <TextBox AcceptsReturn="True"
+                         IsReadOnly="True"
+                         Text="{Binding Output, Mode=OneWay}"
+                         VerticalScrollBarVisibility="Auto" />
             </TabItem>
         </TabControl>
 

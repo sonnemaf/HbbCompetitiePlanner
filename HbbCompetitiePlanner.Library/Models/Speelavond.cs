@@ -1,6 +1,7 @@
 ﻿using ReflectionIT.Universal.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace HbbCompetitiePlanner.Library.Models {
 
@@ -11,7 +12,8 @@ namespace HbbCompetitiePlanner.Library.Models {
 
         public bool IsTweedeDeel { get; set; }
 
-        public DayOfWeek Weekdag => Datum.DayOfWeek;
+        //[JsonIgnore]
+        //public DayOfWeek Weekdag => Datum.DayOfWeek;
 
         /// <summary>
         /// Key = BaanNummer

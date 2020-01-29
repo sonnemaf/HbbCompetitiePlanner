@@ -39,19 +39,21 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Margin="8">
-            <Label Content="Input" />
-            <TextBox Text="" />
-            <Button Margin="0,8"
-                    Command="{Binding StartCommand, Mode=OneTime}"
-                    Content="Start" />
-        </StackPanel>
+        <Button Grid.Row="1"
+                Margin="8"
+                Command="{Binding StartCommand, Mode=OneTime}"
+                Content="Calculate (Creates sample if Input is empty)" />
 
-        <TabControl Grid.Row="1"
-                    Margin="8">
+        <TabControl Margin="8">
+
+            <TabItem Header="Input">
+                <TextBox AcceptsReturn="True"
+                         Text="{Binding Input, Mode=TwoWay}"
+                         VerticalScrollBarVisibility="Auto" />
+            </TabItem>
 
             <TabItem Header="Pouls">
                 <ScrollViewer>
@@ -120,7 +122,8 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Json">
+
+            <TabItem Header="Output">
                 <TextBox AcceptsReturn="True"
                          IsReadOnly="True"
                          Text="{Binding Output, Mode=OneWay}"

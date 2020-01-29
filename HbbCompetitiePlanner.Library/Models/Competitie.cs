@@ -9,8 +9,8 @@ namespace HbbCompetitiePlanner.Library.Models {
 
         public string? Naam { get; set; }
 
-        public List<Speelavond> Speelavonden { get; } = new List<Speelavond>();
         public List<Poul> Pouls { get; } = new List<Poul>();
+        public List<Speelavond> Speelavonden { get; } = new List<Speelavond>();
 
         internal void VerdeelWedstrijdenOverSpeelavonden(bool isTweedeDeel) {
             var wedstrijden = this.Pouls.SelectMany(p => p.Speelrondes.SelectMany(r => r.Wedstrijden).Where(w => w.Speelronde.IsTweedeDeel == isTweedeDeel)).OrderBy(w => w.Speelronde.Nummer).ThenBy(w => w.Poul.Nummer).ToList();
@@ -51,6 +51,13 @@ namespace HbbCompetitiePlanner.Library.Models {
         internal void Sorteren() {
             foreach (var team in Pouls.SelectMany(p => p.Teams)) {
                 team.Wedstrijden.Sort();
+            }
+        }
+
+        internal void CreateSpeelrondes() {
+            int wedstrijdNr = 1;
+            foreach (var p in this.Pouls) {
+                wedstrijdNr = p.CreateSpeelrondes(wedstrijdNr);
             }
         }
     }

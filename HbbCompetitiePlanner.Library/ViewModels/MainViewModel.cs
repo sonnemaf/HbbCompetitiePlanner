@@ -13,6 +13,7 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
         public ICommand StartCommand { get; }
 
         public Competitie? Competitie { get; private set; }
+        public string? Input { get; set; }
         public string? Output { get; private set; }
 
         private MainViewModel() {
@@ -20,13 +21,32 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
         }
 
         private void OnStart() {
-            int teamNr = 1;
-            int wedstrijdNr = 1;
+            if (string.IsNullOrEmpty(Input)) {
+                CreateSampleCompetitie();
+            } else {
+                this.Competitie = JsonConvert.DeserializeObject<Competitie>(Input);
+            }
+
+            if (this.Competitie != null) {
+                this.Competitie.CreateSpeelrondes();
+                this.Competitie.VerdeelWedstrijdenOverSpeelavonden(false);
+                this.Competitie.VerdeelWedstrijdenOverSpeelavonden(true);
+
+                this.Competitie.Sorteren();
+
+                this.Output = JsonConvert.SerializeObject(this.Competitie, Formatting.Indented);
+                OnPropertyChanged(nameof(Output));
+                OnPropertyChanged(nameof(Competitie));
+            }
+            // todo: https://bitbucket.org/rasmuszimmer/wpf-jsonviewer-usercontrol/src/master/
+        }
+
+        private void CreateSampleCompetitie() {
 
             this.Competitie = new Competitie {
                 Naam = "2019-2020"
             };
-            
+
             // Speelavonden
             for (int i = 0; i < 14; i++) {
                 // Woensdag
@@ -58,6 +78,7 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
                 });
             }
 
+            int teamNr = 1;
 
             // Pouls
             for (int i = 1; i < 5; i++) {
@@ -76,21 +97,10 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
                         VoorkeursAvond = (teamNr % 3 == 0 && i >= 3) ? DayOfWeek.Wednesday : DayOfWeek.Thursday,
                     });
                 }
-
-                wedstrijdNr = p.CreateSpeelrondes(wedstrijdNr);
             }
 
-            this.Competitie.VerdeelWedstrijdenOverSpeelavonden(false);
-            this.Competitie.VerdeelWedstrijdenOverSpeelavonden(true);
-
-            this.Competitie.Sorteren();
-
-            this.Output = JsonConvert.SerializeObject(this.Competitie, Formatting.Indented);
-            OnPropertyChanged(nameof(Output));
-            OnPropertyChanged(nameof(Competitie));
-
-            // todo: https://bitbucket.org/rasmuszimmer/wpf-jsonviewer-usercontrol/src/master/
+            this.Input = JsonConvert.SerializeObject(this.Competitie, Formatting.Indented);
+            OnPropertyChanged(nameof(Input));
         }
-
     }
 }

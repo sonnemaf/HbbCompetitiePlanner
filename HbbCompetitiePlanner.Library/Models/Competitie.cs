@@ -8,7 +8,6 @@ namespace HbbCompetitiePlanner.Library.Models {
     public class Competitie : ObservableObject {
 
         public string? Naam { get; set; }
-
         public List<Poul> Pouls { get; } = new List<Poul>();
         public List<Speelavond> Speelavonden { get; } = new List<Speelavond>();
 

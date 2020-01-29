@@ -38,7 +38,7 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
                 OnPropertyChanged(nameof(Output));
                 OnPropertyChanged(nameof(Competitie));
             }
-            // todo: https://bitbucket.org/rasmuszimmer/wpf-jsonviewer-usercontrol/src/master/
+            // TODO: https://bitbucket.org/rasmuszimmer/wpf-jsonviewer-usercontrol/src/master/
         }
 
         private void CreateSampleCompetitie() {

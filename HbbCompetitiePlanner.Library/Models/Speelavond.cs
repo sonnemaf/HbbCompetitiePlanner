@@ -13,6 +13,9 @@ namespace HbbCompetitiePlanner.Library.Models {
 
         public DayOfWeek Weekdag => Datum.DayOfWeek;
 
+        /// <summary>
+        /// Key = BaanNummer
+        /// </summary>
         public Dictionary<int, Wedstrijd> Wedstrijden { get; } = new Dictionary<int, Wedstrijd>();
 
     }

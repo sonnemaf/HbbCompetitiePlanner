@@ -45,7 +45,7 @@
         <Button Grid.Row="1"
                 Margin="8"
                 Command="{Binding StartCommand, Mode=OneTime}"
-                Content="Calculate (Creates sample if Input is empty)" />
+                Content="Calculate (creates sample if Input is empty)" />
 
         <TabControl Margin="8">
 

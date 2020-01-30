@@ -78,7 +78,7 @@ namespace HbbCompetitiePlanner.Library.Models {
         }
 
         [JsonIgnore]
-        public string TeamNamen => string.Join(", ", Teams.Select(t => $"{t.Naam} ({(t.VoorkeursAvond == System.DayOfWeek.Wednesday ? "wo" : "do")})"));
+        public string TeamNamen => string.Join(", ", Teams.Select(t => t.NaamAndSpeelavond));
 
     }
 }

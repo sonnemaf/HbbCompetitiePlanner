@@ -8,8 +8,8 @@
         xmlns:models="clr-namespace:HbbCompetitiePlanner.Library.Models;assembly=HbbCompetitiePlanner.Library"
         xmlns:vm="clr-namespace:HbbCompetitiePlanner.Library.ViewModels;assembly=HbbCompetitiePlanner.Library"
         Title="HBB Competitie Planner"
-        Width="800"
-        Height="450"
+        MinWidth="1024"
+        MinHeight="768"
         DataContext="{x:Static vm:MainViewModel.Current}"
         FontSize="16"
         WindowState="Maximized"
@@ -20,21 +20,54 @@
         <DataTemplate x:Key="WedstrijdDataTemplate">
             <StackPanel d:DataContext="{d:DesignInstance Type=models:Wedstrijd}"
                         Orientation="Horizontal">
-                <TextBlock Width="50"
+                <TextBlock Width="60"
                            Text="{Binding Speelronde.Nummer}"
                            ToolTipService.ToolTip="Ronde" />
-                <TextBlock Width="50"
+                <TextBlock Width="140"
+                           Text="{Binding Speeldatum, StringFormat=ddd d-M-yyyy, ConverterCulture=nl-NL}" />
+                <TextBlock Width="200"
+                           Text="{Binding Poul.Naam}"
+                           ToolTipService.ToolTip="Poul" />
+                <TextBlock Width="60"
+                           Text="{Binding BaanNummer}"
+                           ToolTipService.ToolTip="Baan Nr" />
+                <TextBlock Width="60"
                            Text="{Binding Nummer}"
                            ToolTipService.ToolTip="Wedstrijd Nr" />
-                <TextBlock Width="140"
-                           Text="{Binding Speeldatum, StringFormat=ddd-d-M-yyyy, ConverterCulture=nl-NL}" />
-                <TextBlock Width="300"
-                           Text="{Binding Team1.Naam}" />
-                <TextBlock Width="300"
-                           Text="{Binding Team2.Naam}" />
+                <TextBlock Width="200"
+                           Text="{Binding Team1.NaamAndSpeelavond}" />
+                <TextBlock Width="200"
+                           Text="{Binding Team2.NaamAndSpeelavond}" />
             </StackPanel>
 
         </DataTemplate>
+
+        <ControlTemplate x:Key="WedstrijdHeader">
+            <StackPanel Margin="0,8,0,0"
+                        Orientation="Horizontal">
+                <TextBlock Width="60"
+                           FontWeight="Bold"
+                           Text="Ronde" />
+                <TextBlock Width="140"
+                           FontWeight="Bold"
+                           Text="Datum" />
+                <TextBlock Width="200"
+                           FontWeight="Bold"
+                           Text="Poul" />
+                <TextBlock Width="60"
+                           FontWeight="Bold"
+                           Text="Baan" />
+                <TextBlock Width="60"
+                           FontWeight="Bold"
+                           Text="Nr" />
+                <TextBlock Width="200"
+                           FontWeight="Bold"
+                           Text="Team 1" />
+                <TextBlock Width="200"
+                           FontWeight="Bold"
+                           Text="Team 2" />
+            </StackPanel>
+        </ControlTemplate>
     </Window.Resources>
 
     <Grid>
@@ -71,8 +104,8 @@
                                         <TextBlock Text="{Binding Nummer, StringFormat='Nummer: {0}'}" />
                                         <TextBlock Text="{Binding IsHalveCompetitie, StringFormat='Halve competitie: {0}'}" />
                                         <TextBlock Text="{Binding TeamNamen}" />
-                                        <ItemsControl Margin="0,8"
-                                                      ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                        <ContentControl Template="{StaticResource WedstrijdHeader}" />
+                                        <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
                                                       ItemsSource="{Binding Wedstrijden}" />
                                     </StackPanel>
                                 </Border>
@@ -95,7 +128,8 @@
                                                    Foreground="Red"
                                                    Text="{Binding Naam}" />
                                         <TextBlock Text="{Binding Nummer, StringFormat='Nummer: {0}'}" />
-                                        <ItemsControl ItemsSource="{Binding Teams}">
+                                        <ItemsControl Margin="0,8"
+                                                      ItemsSource="{Binding Teams}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border Margin="8"
@@ -107,14 +141,39 @@
                                                                        Foreground="Blue"
                                                                        Text="{Binding Naam}" />
                                                             <TextBlock Text="{Binding VoorkeursAvond, Converter={x:Static helpers:AvondConverter.Current}, StringFormat='VoorkeursAvond: {0}'}" />
-                                                            <ItemsControl Margin="0,8"
-                                                                          ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                                            <TextBlock Text="{Binding TrainingsAvond, Converter={x:Static helpers:AvondConverter.Current}, StringFormat='TrainingsAvond: {0}'}" />
+                                                            <ContentControl Template="{StaticResource WedstrijdHeader}" />
+                                                            <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
                                                                           ItemsSource="{Binding Wedstrijden}" />
                                                         </StackPanel>
                                                     </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Speelavonden">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Competitie.Speelavonden}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="8"
+                                        Padding="8"
+                                        BorderBrush="Black"
+                                        BorderThickness="2">
+                                    <StackPanel>
+                                        <TextBlock FontSize="20"
+                                                   Foreground="Red"
+                                                   Text="{Binding Datum, StringFormat=ddd d-M-yyyy, ConverterCulture=nl-NL}" />
+                                        <TextBlock Text="{Binding AantalBanen, StringFormat='AantalBanen: {0}'}" />
+                                        <ContentControl Template="{StaticResource WedstrijdHeader}" />
+                                        <ItemsControl ItemTemplate="{StaticResource WedstrijdDataTemplate}"
+                                                      ItemsSource="{Binding Wedstrijden.Values}" />
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>

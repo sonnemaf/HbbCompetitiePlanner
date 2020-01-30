@@ -81,7 +81,7 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
             int teamNr = 1;
 
             // Pouls
-            for (int i = 1; i < 5; i++) {
+            for (int i = 1; i < 8; i++) {
                 var p = new Poul {
                     Naam = $"Klasse {i}",
                     Nummer = i,
@@ -93,8 +93,8 @@ namespace HbbCompetitiePlanner.Library.ViewModels {
                     p.Teams.Add(new Team() {
                         Naam = $"Team {t}.{p.Nummer}",
                         Nr = teamNr++,
-                        TrainingsAvond = i < 3 ? DayOfWeek.Tuesday : DayOfWeek.Wednesday,
-                        VoorkeursAvond = (teamNr % 3 == 0 && i >= 3) ? DayOfWeek.Wednesday : DayOfWeek.Thursday,
+                        TrainingsAvond = t < 3 ? DayOfWeek.Tuesday : DayOfWeek.Wednesday,
+                        VoorkeursAvond = (t % 2 == 0) ? DayOfWeek.Wednesday : DayOfWeek.Thursday,
                     });
                 }
             }
